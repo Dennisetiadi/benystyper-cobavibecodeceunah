@@ -1,0 +1,85 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #0f1115;
+  color: #d6d3c8;
+}
+
+#words {
+  height: 7.5rem;
+  overflow: hidden;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+
+#words-wrap.unfocused #words {
+  filter: blur(4px);
+  opacity: 0.45;
+}
+
+.word {
+  display: inline-flex;
+  margin: 0 0.35rem 0.55rem 0;
+  line-height: 2.4rem;
+  font-size: 1.5rem;
+}
+
+.letter {
+  position: relative;
+  color: #646669;
+}
+
+.letter.correct {
+  color: #d1d0c5;
+}
+
+.letter.incorrect {
+  color: #ca4754;
+}
+
+.letter.extra {
+  color: #ca4754;
+  opacity: 0.75;
+}
+
+.caret {
+  position: absolute;
+  left: -1px;
+  top: 0.2rem;
+  width: 2px;
+  height: 1.9rem;
+  background: #e2b714;
+  animation: blink 1s step-end infinite;
+}
+
+.caret.end {
+  left: auto;
+  right: -2px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.result-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.history-menu {
+  max-height: min(28rem, calc(100vh - 6rem));
+}
+
+.history-list {
+  max-height: min(22rem, calc(100vh - 12rem));
+  overflow-y: auto;
+}

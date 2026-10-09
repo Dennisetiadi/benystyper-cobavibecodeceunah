@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>benystyper</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: "#0f1115",
+              paper: "#d6d3c8",
+              mute: "#646669",
+              caret: "#e2b714",
+              good: "#d1d0c5",
+              bad: "#ca4754",
+              extra: "#7e2a33",
+            },
+            fontFamily: {
+              display: ["Outfit", "sans-serif"],
+              mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="font-mono antialiased">
+    <div class="min-h-full flex flex-col">
+      <header class="flex items-center justify-between px-8 py-6">
+        <div class="flex items-baseline gap-3">
+          <h1 class="font-display text-2xl tracking-tight text-paper">benystyper</h1>
+          <span class="text-xs uppercase tracking-[0.2em] text-mute">30s</span>
+        </div>
+        <div class="relative flex items-center gap-4">
+          <p class="text-xs text-mute hidden sm:block">sentences, not scrambled words</p>
+          <button
+            id="history-toggle"
+            type="button"
+            class="text-xs text-mute hover:text-paper transition-colors"
+            aria-expanded="false"
+            aria-controls="history-menu"
+          >
+            history
+          </button>
+          <section
+            id="history-menu"
+            class="history-menu hidden absolute right-0 top-full z-50 mt-3 w-80 max-w-[calc(100vw-2rem)] rounded-lg border border-white/10 bg-ink p-4 shadow-xl"
+            aria-labelledby="history-title"
+            aria-hidden="true"
+          >
+            <div class="mb-3 flex items-center justify-between">
+              <h2 id="history-title" class="font-display text-lg text-paper">Test history</h2>
+              <button
+                id="history-close"
+                type="button"
+                class="text-xs text-mute hover:text-paper transition-colors"
+                aria-label="Close test history"
+              >
+                close
+              </button>
+            </div>
+            <p id="history-message" class="mb-3 text-xs text-bad" role="status"></p>
+            <ol id="history-list" class="history-list space-y-3" aria-live="polite"></ol>
+          </section>
+        </div>
+      </header>
+
+      <main class="flex-1 flex items-center justify-center px-6">
+        <section class="w-full max-w-4xl">
+          <div id="test" class="relative">
+            <div class="flex items-center gap-6 mb-6 text-caret">
+              <div id="timer" class="text-3xl result-num">30</div>
+              <div id="live-wpm" class="text-mute text-sm tracking-wide">0 wpm</div>
+            </div>
+
+            <div class="flex flex-wrap gap-x-6 gap-y-2 mb-5 text-xs text-mute">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input id="punctuation-toggle" type="checkbox" class="accent-caret" />
+                remove punctuation
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input id="lowercase-toggle" type="checkbox" class="accent-caret" />
+                lowercase
+              </label>
+            </div>
+
+            <div
+              id="words-wrap"
+              class="relative cursor-text outline-none"
+              tabindex="0"
+            >
+              <div id="words"></div>
+              <div
+                id="focus-overlay"
+                class="absolute inset-0 flex items-center justify-center bg-ink/70 text-mute text-sm tracking-wide"
+              >
+                click here or start typing
+              </div>
+            </div>
+
+            <div class="mt-10 flex items-center justify-center text-mute text-xs tracking-wide">
+              <button id="restart" class="hover:text-paper transition-colors">
+                tab + enter — restart
+              </button>
+            </div>
+          </div>
+
+          <div id="results" class="hidden">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-8">
+              <div>
+                <p class="text-mute text-xs uppercase tracking-[0.2em]">wpm</p>
+                <p id="stat-wpm" class="font-display text-5xl text-caret result-num mt-2">0</p>
+              </div>
+              <div>
+                <p class="text-mute text-xs uppercase tracking-[0.2em]">acc</p>
+                <p id="stat-acc" class="font-display text-5xl text-paper result-num mt-2">0%</p>
+              </div>
+              <div>
+                <p class="text-mute text-xs uppercase tracking-[0.2em]">raw</p>
+                <p id="stat-raw" class="font-display text-5xl text-paper result-num mt-2">0</p>
+              </div>
+              <div>
+                <p class="text-mute text-xs uppercase tracking-[0.2em]">chars</p>
+                <p id="stat-chars" class="font-display text-2xl text-paper result-num mt-2">0/0/0</p>
+                <p class="text-mute text-[11px] mt-1">correct / incorrect / extra</p>
+              </div>
+            </div>
+            <div class="mt-12 flex items-center justify-center">
+              <button
+                id="restart-results"
+                class="text-mute hover:text-paper text-sm tracking-wide transition-colors"
+              >
+                tab + enter — next test
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <input id="hidden-input" class="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+    <script src="./sentences.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
